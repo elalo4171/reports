@@ -18,11 +18,6 @@ class AppBarHomeWidget extends StatelessWidget {
           },
           child: const Text("Report\nApp"),
         ),
-        InkWell(
-            onTap: () {
-              //TODO Puesh to browser
-            },
-            child: const Icon(Icons.search)),
       ],
     );
   }

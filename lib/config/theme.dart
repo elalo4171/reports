@@ -5,6 +5,7 @@ import 'package:reports/config/colors_const.dart';
 class ThemeApp {
   static ThemeData themeLigth = ThemeData(
     scaffoldBackgroundColor: ColorsConst.background,
+    colorScheme: ColorScheme.fromSeed(seedColor: ColorsConst.background),
     textTheme: TextTheme(
       headline1: TextStyle(
         color: ColorsConst.textColor,

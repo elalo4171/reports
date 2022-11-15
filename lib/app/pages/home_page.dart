@@ -61,19 +61,20 @@ class _BuildHomePageState extends State<_BuildHomePage> {
                         state.reports.isEmpty) {
                       return const Text('No reports yet');
                     }
+                    List<ReportModel> reports = state.reports.reversed.toList();
                     return SizedBox(
                       height: 300,
                       child: ListView.separated(
                           controller: _scrollController,
                           physics: const BouncingScrollPhysics(),
-                          itemCount: state.reports.length,
+                          itemCount: reports.length,
                           separatorBuilder: (context, index) =>
                               const CustomDivider(),
                           itemBuilder: (context, index) {
                             return _ReportListItem(
                               index: index,
                               scrollOffset: _scrollController.offset,
-                              report: state.reports[index],
+                              report: reports[index],
                             );
                           }),
                     );
@@ -83,12 +84,6 @@ class _BuildHomePageState extends State<_BuildHomePage> {
                   flex: 4,
                 ),
                 const _BtnNewReport(),
-                const Spacer(),
-                const Text('Or'),
-                const Spacer(
-                  flex: 2,
-                ),
-                const _BtnBrowseReports(),
                 const Spacer(
                   flex: 4,
                 ),
@@ -134,8 +129,10 @@ class _BtnNewReport extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        await Navigator.of(context).pushNamed("new_report",
-            arguments: BlocProvider.of<GlobalBloc>(context));
+        final bloc = BlocProvider.of<GlobalBloc>(context);
+        bloc.add(SetCurrentReport(const ReportModel()));
+        bloc.add(SetIsEdit(true));
+        await Navigator.of(context).pushNamed("new_report", arguments: bloc);
       },
       child: const Text('New Report',
           style: TextStyle(
@@ -187,42 +184,51 @@ class _ReportListItem extends StatelessWidget {
       height: itemHeight,
       child: Opacity(
         opacity: opacityPercent,
-        child: Card(
-          elevation: 0,
-          color: Colors.transparent,
-          child: Center(
-            child: ListTile(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 150,
-                    child: Text(
-                      report.title,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  Text(report.date),
-                ],
-              ),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-                child: Row(
+        child: InkWell(
+          onTap: () async {
+            final bloc = BlocProvider.of<GlobalBloc>(context);
+            bloc.add(SetCurrentReport(report));
+            bloc.add(SetIsEdit(false));
+            await Navigator.of(context)
+                .pushNamed("new_report", arguments: bloc);
+          },
+          child: Card(
+            elevation: 0,
+            color: Colors.transparent,
+            child: Center(
+              child: ListTile(
+                title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
                       width: 150,
                       child: Text(
-                        report.description,
+                        report.title,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    if (report.hasImage()) const Icon(Icons.photo)
+                    Text(report.date),
                   ],
                 ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        child: Text(
+                          report.description,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (report.hasImage()) const Icon(Icons.photo)
+                    ],
+                  ),
+                ),
+                // trailing: const Text("12/12/2021"),
+                isThreeLine: true,
               ),
-              // trailing: const Text("12/12/2021"),
-              isThreeLine: true,
             ),
           ),
         ),
