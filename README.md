@@ -1,16 +1,13 @@
-# reports
+# Aplicacion de reportes
 
-A new Flutter project.
+Esta es una prueba tecnica, se tienen que poder crear Reportes, editar y eliminar.
 
-## Getting Started
+Cada reporte debe tener Titulo, Descripcion y una imagen opcional.
 
-This project is a starting point for a Flutter application.
+Se agrego el APK en la raiz para que la puedan probar.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![image](https://github.com/elalo4171/reports/blob/main/img/Screen%20Shot%202022-11-15%20at%200.56.36.png?raw=true)
+![image](https://github.com/elalo4171/reports/blob/main/img/Screen%20Shot%202022-11-15%20at%200.56.49.png?raw=true)
+![image](https://github.com/elalo4171/reports/blob/main/img/Screen%20Shot%202022-11-15%20at%200.57.09.png?raw=true)
+![image](https://github.com/elalo4171/reports/blob/main/img/Screen%20Shot%202022-11-15%20at%200.57.41.png?raw=true)
+![image](https://github.com/elalo4171/reports/blob/main/img/Screen%20Shot%202022-11-15%20at%200.58.03.png?raw=true)
