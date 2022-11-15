@@ -28,7 +28,7 @@ class _BuildHomePage extends StatefulWidget {
 }
 
 class _BuildHomePageState extends State<_BuildHomePage> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -91,30 +91,6 @@ class _BuildHomePageState extends State<_BuildHomePage> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _BtnBrowseReports extends StatelessWidget {
-  const _BtnBrowseReports({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("By Eduardo Garcia"),
-          ),
-        );
-      },
-      child: const Text(
-        'Browse Reports',
-        style: TextStyle(
-            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
       ),
     );
   }

@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Material App',
+      title: 'Reports App',
       theme: ThemeApp.themeLigth,
       onGenerateRoute: routes,
       initialRoute: 'welcome',
