@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeApp.themeLigth,
       onGenerateRoute: routes,
       initialRoute: 'welcome',
+      debugShowCheckedModeBanner: false,
     );
   }
 }
