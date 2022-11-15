@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:reports/app/data/provider/reports_local_db.dart';
 import 'package:reports/config/routes.dart';
 import 'package:reports/config/theme.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  ReportsLocalDb.initDataBase();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:reports/app/data/provider/reports_local_db.dart';
+import 'package:reports/app/widgets/appbar_home_widget.dart';
 import 'package:reports/app/widgets/custom_divider.dart';
 import 'package:reports/config/colors_const.dart';
 
@@ -12,8 +14,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   ScrollController _scrollController = ScrollController();
 
+  Future<void> testbox() async {
+    final data = await ReportsLocalDb().getReports();
+    print(data.length);
+  }
+
   @override
   void initState() {
+    testbox();
     _scrollController.addListener(() {
       setState(() {});
     });
@@ -29,30 +37,8 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("By Eduardo Garcia"),
-                          ),
-                        );
-                      },
-                      child: const Text("Report\nApp"),
-                    ),
-                    InkWell(
-                        onTap: () {
-                          //TODO Puesh to browser
-                        },
-                        child: const Icon(Icons.search)),
-                  ],
-                ),
-                const Text(
-                  "Recent Reports",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
+                const AppBarHomeWidget(),
+                const _Title(),
                 const SizedBox(height: 20),
                 SizedBox(
                   height: 300,
@@ -72,37 +58,13 @@ class _HomePageState extends State<HomePage> {
                 const Spacer(
                   flex: 4,
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    await Navigator.of(context).pushNamed("new_report");
-                  },
-                  child: const Text('New Report',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ),
+                const _BtnNewReport(),
                 const Spacer(),
                 const Text('Or'),
                 const Spacer(
                   flex: 2,
                 ),
-                InkWell(
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("By Eduardo Garcia"),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Browse Reports',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15),
-                  ),
-                ),
+                const _BtnBrowseReports(),
                 const Spacer(
                   flex: 4,
                 ),
@@ -111,6 +73,64 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BtnBrowseReports extends StatelessWidget {
+  const _BtnBrowseReports({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("By Eduardo Garcia"),
+          ),
+        );
+      },
+      child: const Text(
+        'Browse Reports',
+        style: TextStyle(
+            color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+      ),
+    );
+  }
+}
+
+class _BtnNewReport extends StatelessWidget {
+  const _BtnNewReport({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () async {
+        await Navigator.of(context).pushNamed("new_report");
+      },
+      child: const Text('New Report',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          )),
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      "Recent Reports",
+      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
     );
   }
 }
