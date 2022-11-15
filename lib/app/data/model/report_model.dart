@@ -13,6 +13,10 @@ class ReportModel {
     this.id = '',
   });
 
+  bool hasImage() {
+    return image.isNotEmpty;
+  }
+
   factory ReportModel.fromJson(Map<String, dynamic> json) {
     return ReportModel(
       title: json['title'],

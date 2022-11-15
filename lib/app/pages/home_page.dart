@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reports/app/data/bloc/global_bloc.dart';
+import 'package:reports/app/data/enums.dart';
+import 'package:reports/app/data/model/report_model.dart';
 import 'package:reports/app/data/provider/reports_local_db.dart';
 import 'package:reports/app/widgets/appbar_home_widget.dart';
 import 'package:reports/app/widgets/custom_divider.dart';
@@ -12,14 +14,14 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     ReportsLocalDb reportsLocalDb = ReportsLocalDb();
     return BlocProvider(
-      create: (context) => GlobalBloc(reportsLocalDb),
-      child: _BuildHomePage(),
+      create: (context) => GlobalBloc(reportsLocalDb)..add(LoadReports()),
+      child: const _BuildHomePage(),
     );
   }
 }
 
 class _BuildHomePage extends StatefulWidget {
-  const _BuildHomePage({super.key});
+  const _BuildHomePage();
 
   @override
   State<_BuildHomePage> createState() => _BuildHomePageState();
@@ -28,14 +30,8 @@ class _BuildHomePage extends StatefulWidget {
 class _BuildHomePageState extends State<_BuildHomePage> {
   ScrollController _scrollController = ScrollController();
 
-  Future<void> testbox() async {
-    final data = await ReportsLocalDb().getReports();
-    print(data.length);
-  }
-
   @override
   void initState() {
-    testbox();
     _scrollController.addListener(() {
       setState(() {});
     });
@@ -54,20 +50,34 @@ class _BuildHomePageState extends State<_BuildHomePage> {
                 const AppBarHomeWidget(),
                 const _Title(),
                 const SizedBox(height: 20),
-                SizedBox(
-                  height: 300,
-                  child: ListView.separated(
-                      controller: _scrollController,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: 40,
-                      separatorBuilder: (context, index) =>
-                          const CustomDivider(),
-                      itemBuilder: (context, index) {
-                        return _ReportListItem(
-                          index: index,
-                          scrollOffset: _scrollController.offset,
-                        );
-                      }),
+                BlocBuilder<GlobalBloc, GlobalState>(
+                  builder: (context, state) {
+                    if (state.statusLoadReports ==
+                        RequestStatus.submissionInProgress) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (state.statusLoadReports ==
+                            RequestStatus.submissionSuccess &&
+                        state.reports.isEmpty) {
+                      return const Text('No reports yet');
+                    }
+                    return SizedBox(
+                      height: 300,
+                      child: ListView.separated(
+                          controller: _scrollController,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: state.reports.length,
+                          separatorBuilder: (context, index) =>
+                              const CustomDivider(),
+                          itemBuilder: (context, index) {
+                            return _ReportListItem(
+                              index: index,
+                              scrollOffset: _scrollController.offset,
+                              report: state.reports[index],
+                            );
+                          }),
+                    );
+                  },
                 ),
                 const Spacer(
                   flex: 4,
@@ -124,7 +134,8 @@ class _BtnNewReport extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () async {
-        await Navigator.of(context).pushNamed("new_report");
+        await Navigator.of(context).pushNamed("new_report",
+            arguments: BlocProvider.of<GlobalBloc>(context));
       },
       child: const Text('New Report',
           style: TextStyle(
@@ -154,9 +165,11 @@ class _ReportListItem extends StatelessWidget {
     Key? key,
     required this.index,
     required this.scrollOffset,
+    required this.report,
   }) : super(key: key);
   final int index;
   final double scrollOffset;
+  final ReportModel report;
 
   @override
   Widget build(BuildContext context) {
@@ -182,8 +195,8 @@ class _ReportListItem extends StatelessWidget {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Reporte 1"),
-                  const Text("12/12/2021"),
+                  Text(report.title),
+                  Text(report.date),
                 ],
               ),
               subtitle: Padding(
@@ -191,8 +204,8 @@ class _ReportListItem extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Eduardo Garcia "),
-                    const Icon(Icons.photo)
+                    Text(report.description),
+                    if (report.hasImage()) const Icon(Icons.photo)
                   ],
                 ),
               ),

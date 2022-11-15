@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:reports/app/data/bloc/global_bloc.dart';
 import 'package:reports/app/data/model/report_model.dart';
-import 'package:reports/app/data/provider/reports_local_db.dart';
 import 'package:reports/app/widgets/custom_divider.dart';
 
 class NewReport extends StatefulWidget {
-  const NewReport({super.key});
+  const NewReport({super.key, required this.globalBloc});
+  final GlobalBloc globalBloc;
 
   @override
   State<NewReport> createState() => _NewReportState();
 }
 
 class _NewReportState extends State<NewReport> {
-  ReportModel _reportModel = ReportModel();
+  ReportModel _reportModel = const ReportModel();
 
-  Future<void> saveReport() async {
-    ReportsLocalDb db = ReportsLocalDb();
-    await db.addReport(_reportModel);
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -39,7 +40,7 @@ class _NewReportState extends State<NewReport> {
                   ),
                   InkWell(
                     onTap: () async {
-                      await saveReport();
+                      widget.globalBloc.add(CreatedReport(_reportModel));
                       Navigator.pop(context);
                     },
                     child: Text(
@@ -81,7 +82,7 @@ class _NewReportState extends State<NewReport> {
                   decoration: const InputDecoration(
                     hintText: "Your report",
                   ),
-                  onChanged: (value) => _reportModel.copyWith(
+                  onChanged: (value) => _reportModel = _reportModel.copyWith(
                     description: value,
                   ),
                 ),
