@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:reports/app/data/bloc/global_bloc.dart';
 import 'package:reports/app/data/provider/reports_local_db.dart';
 import 'package:reports/app/widgets/appbar_home_widget.dart';
 import 'package:reports/app/widgets/custom_divider.dart';
-import 'package:reports/config/colors_const.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  Widget build(BuildContext context) {
+    ReportsLocalDb reportsLocalDb = ReportsLocalDb();
+    return BlocProvider(
+      create: (context) => GlobalBloc(reportsLocalDb),
+      child: _BuildHomePage(),
+    );
+  }
 }
 
-class _HomePageState extends State<HomePage> {
+class _BuildHomePage extends StatefulWidget {
+  const _BuildHomePage({super.key});
+
+  @override
+  State<_BuildHomePage> createState() => _BuildHomePageState();
+}
+
+class _BuildHomePageState extends State<_BuildHomePage> {
   ScrollController _scrollController = ScrollController();
 
   Future<void> testbox() async {

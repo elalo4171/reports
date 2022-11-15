@@ -1,11 +1,11 @@
 class ReportModel {
-  String title;
-  String date;
-  String description;
-  String image;
-  String id;
+  final String title;
+  final String date;
+  final String description;
+  final String image;
+  final String id;
 
-  ReportModel({
+  const ReportModel({
     this.title = '',
     this.date = '',
     this.description = '',

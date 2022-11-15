@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:reports/app/data/model/report_model.dart';
+import 'package:reports/app/data/provider/reports_local_db.dart';
 import 'package:reports/app/widgets/custom_divider.dart';
-import 'package:reports/config/colors_const.dart';
 
-class NewReport extends StatelessWidget {
+class NewReport extends StatefulWidget {
   const NewReport({super.key});
+
+  @override
+  State<NewReport> createState() => _NewReportState();
+}
+
+class _NewReportState extends State<NewReport> {
+  ReportModel _reportModel = ReportModel();
+
+  Future<void> saveReport() async {
+    ReportsLocalDb db = ReportsLocalDb();
+    await db.addReport(_reportModel);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +38,8 @@ class NewReport extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      await saveReport();
                       Navigator.pop(context);
                     },
                     child: Text(
@@ -42,13 +56,16 @@ class NewReport extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             const CustomDivider(),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SingleChildScrollView(
                 child: TextField(
                   maxLines: 1,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "The Title",
+                  ),
+                  onChanged: (value) => _reportModel = _reportModel.copyWith(
+                    title: value,
                   ),
                 ),
               ),
@@ -64,7 +81,9 @@ class NewReport extends StatelessWidget {
                   decoration: const InputDecoration(
                     hintText: "Your report",
                   ),
-                  onChanged: (newValue) {},
+                  onChanged: (value) => _reportModel.copyWith(
+                    description: value,
+                  ),
                 ),
               ),
             ),
