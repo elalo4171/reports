@@ -195,7 +195,13 @@ class _ReportListItem extends StatelessWidget {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(report.title),
+                  SizedBox(
+                    width: 150,
+                    child: Text(
+                      report.title,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                   Text(report.date),
                 ],
               ),
@@ -204,7 +210,13 @@ class _ReportListItem extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(report.description),
+                    SizedBox(
+                      width: 150,
+                      child: Text(
+                        report.description,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                     if (report.hasImage()) const Icon(Icons.photo)
                   ],
                 ),
